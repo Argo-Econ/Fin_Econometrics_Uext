@@ -1,0 +1,11 @@
+Pasos para clonar repositorios en git
+
+1. Descargar Git desde el enlace: https://git-scm.com/downloads
+2. instalar git segun parametros por defecto.
+3. Un vez instalado dirigirnos a la carpeta a la cual queremos realizar la clonacion del repositorio
+4. al estar en la carpeta donde se realizara la clonacion dar clic derecho y luego en la opcion "git_bash here"
+5. se abrira una ventana de color negro, luego en esa terminal digitar los siguientes comandos.
+6. git clone <enter>
+
+De esta forma, se logra clonar el repositorio desde alguna locacion en la nube donde se encuentra el repositorio, puede ser github o desde gitlab, AzureDevops, entre otros.
+
