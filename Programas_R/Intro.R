@@ -73,7 +73,7 @@ ts_plot(ret_log_YoY2[,1:3]
 
 # Separacion por columnas
 Datos_ent1 <- var_YoY %>% separate(Fecha,sep = "-",into = c("anho","mes","dia"))
-
+tail(Datos_ent1)
 
 # Grafico de distribucion
 windows()
@@ -85,7 +85,7 @@ ggplot(Datos_ent1, aes(x = IPC, y = as.factor(anho) , fill = factor(stat(quantil
   ) +
     scale_fill_manual(
     name = "Probabilidad", values = c("#FF0000A0", "#A0A0A0A0", "#0000FFA0"),
-    labels = c("(0, 5%]", "(5%, 95%]", "(95%, 100%]")
+    labels = c("(0, 1%]", "(1%, 99%]", "(99%, 100%]")
   ) +
   labs(title = 'Distribucion inflacion anual por anhos')
 
@@ -109,5 +109,40 @@ Correlacion_dinamica(Datos_ent1$BCOM,Datos_ent1$IPC,"BCOM","IPC")
 
 
 # Regresion lineal -------------------------------------------------------------
+Datos_modelo <- na.omit(var_YoY)
+tail(Datos_modelo)
+
+mod1 <- lm(ISE_PM3~. ,data = Datos_modelo)
+summary(mod1)
+
+windows()
+checkresiduals(mod1)
+
+windows()
+plot(as.ts(Datos_modelo$ISE_PM3),col="b")
+lines(as.ts(mod1$fitted.values))
 
 
+mod2 <- lm(ISE_PM3~I(Cartera_Comercial-IPC)+I(Cartera_consumo-IPC)+I(M1/IPC)
+           ,data = Datos_modelo)
+summary(mod2)
+
+mod3 <- lm(ISE_PM3~.,data = log(Datos_ent[,-1]))
+summary(mod3)
+
+windows()
+checkresiduals(mod3)
+
+windows()
+ts_plot(as.ts(cbind(Datos_modelo$ISE_PM3,mod3$fitted.values)))
+
+windows()
+plot(as.ts(Datos_modelo$ISE_PM3))
+lines(as.ts(mod3$fitted.values))
+
+
+
+# Uso del modelo -----
+
+predic_mod1 <- predict(mod1,newdata = tail(var_YoY[,-2],2))
+predic_mod1
